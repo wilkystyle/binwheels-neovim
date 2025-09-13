@@ -6,17 +6,6 @@ on:
 jobs:
   build-wheels:
     name: Build Linux wheels
-    strategy:
-      fail-fast: false
-      matrix:
-        python_version:
-          - "3.8"
-          # - "3.9"
-          # - "3.10"
-          # - "3.11"
-          # - "3.12"
-          # - "3.13"
-          # - "3.14"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -36,5 +25,5 @@ jobs:
         with:
           compression-level: 0  # We're uploading a zip; no need to try to compress the zip
           if-no-files-found: error
-          name: neovim_pyinstalled py${{ matrix.python_version }}
+          name: neovim_pyinstaller
           path: 'dist/*.whl'
