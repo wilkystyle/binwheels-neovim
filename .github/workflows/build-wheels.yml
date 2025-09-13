@@ -4,10 +4,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-wheels:
-    name: Build Linux wheels
-    runs-on: ubuntu-latest
+
+  build-macos-wheels:
+    name: Build macOS wheel
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-13  # macOS intel
+          - macos-latest  # macOS ARM (M-series silicon)
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: bash
@@ -16,14 +23,37 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Compile Neovim and build wheel
-        uses: docker://quay.io/pypa/manylinux_2_24_x86_64:latest
-        with:
-          args: 'make bootstrap build'
+        run: |
+          make bootstrap build-macos
 
       - name: Upload built wheel as job artifact
         uses: actions/upload-artifact@v4
         with:
           compression-level: 0  # We're uploading a zip; no need to try to compress the zip
           if-no-files-found: error
-          name: neovim_pyinstaller
+          name: neovim_pyinstaller ${{ matrix.os }}
           path: 'dist/*.whl'
+
+  # build-linux-wheel:
+  #   name: Build Linux wheel
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v5
+
+  #     - name: Compile Neovim and build wheel
+  #       uses: docker://quay.io/pypa/manylinux_2_24_x86_64:latest
+  #       with:
+  #         args: 'make bootstrap build-linux'
+
+  #     - name: Upload built wheel as job artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         compression-level: 0  # We're uploading a zip; no need to try to compress the zip
+  #         if-no-files-found: error
+  #         name: neovim_pyinstaller Linux
+  #         path: 'dist/*.whl'
