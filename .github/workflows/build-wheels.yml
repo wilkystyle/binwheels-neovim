@@ -29,7 +29,7 @@ jobs:
       - name: Compile Neovim and build wheel
         uses: docker://quay.io/pypa/manylinux_2_24_x86_64:latest
         with:
-          args: 'make build'
+          args: 'make bootstrap build'
 
       - name: Upload built wheel as job artifact
         uses: actions/upload-artifact@v4
