@@ -23,7 +23,7 @@ build: install
 
 docker:
 	@echo Launching container...
-	@docker run --rm -d --name neovim_pyinstaller quay.io/pypa/manylinux_2_28_x86_64 tail -f /dev/null
+	@docker run --rm -d --name neovim_pyinstaller quay.io/pypa/manylinux_2_24_x86_64 tail -f /dev/null
 	@echo Copying source directory...
 	@docker cp ./ neovim_pyinstaller:/source
 	-@docker exec --workdir /source -it neovim_pyinstaller /bin/bash
