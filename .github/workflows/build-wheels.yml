@@ -1,0 +1,38 @@
+name: "Build neovim-pyinstaller wheels"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-wheels:
+    name: Build Linux wheels
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.10"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Compile Neovim and build wheel
+        uses: docker://quay.io/pypa/manylinux2014_x86_64:latest
+        run: |
+          ls -lah
+          # curl -LsSf https://astral.sh/uv/install.sh | sh
+          # source ~/.bashrc
+          #
+          # # TODO: Compile and install Neovim here
+          #
+          # uv venv --seed --no-managed-python --python ${{ matrix.python_version }}
+          # uv pip install -e .
+
+      - name: Build the wheel
+        run: uv run --no-project invoke build
+
+# TODO: Upload wheel
