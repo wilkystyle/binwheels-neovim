@@ -16,9 +16,13 @@ bootstrap:
 install: .venv
 	@uv pip install -e '.[dev]'
 
-build: install
+build-linux: install
 	git clone --depth=1 https://github.com/neovim/neovim /tmp/neovim
 	cd /tmp/neovim && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
+	uv run --no-project python -m build --wheel
+
+build-macos: install
+	uv run python download_macos.py
 	uv run --no-project python -m build --wheel
 
 docker:
