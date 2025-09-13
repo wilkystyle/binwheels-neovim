@@ -14,7 +14,7 @@ bootstrap:
 	@uv venv --seed --no-managed-python -cp 3.10
 
 install: .venv
-	@uv pip install -e .
+	@uv pip install -e '.[dev]'
 
 build: install
 	git clone --depth=1 https://github.com/neovim/neovim /tmp/neovim
