@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Compile Neovim and build wheel
-        uses: docker://quay.io/pypa/manylinux2014_x86_64:latest
+        uses: docker://quay.io/pypa/manylinux_2_24_x86_64:latest
         with:
           args: 'make build'
 
