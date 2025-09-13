@@ -1,9 +1,9 @@
 [project]
 name = "neovim-pyinstaller"
-version = "0.11.4"  # Should match Neovim release version
+version = "0.11.4"
 description = "Cross-platform Neovim installation via Python packaging"
 readme = "README.md"
-license = {text = "Apache-2.0"}  # TODO: Which license?
+license = {text = "Apache-2.0"}
 
 authors = [
     {name = "Mike Wilkerson", email = "wilkystyle@gmail.com"}
