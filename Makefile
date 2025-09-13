@@ -11,12 +11,16 @@ bootstrap:
 	@curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/usr/local/bin" sh
 
 .venv:
-	@uv venv --seed --no-managed-python -cp 3.10
-
-install: .venv
+	@uv venv --seed --managed-python -cp 3.10
 	@uv pip install -e '.[dev]'
 
-build-linux: install
+install: .venv/
+
+install-manylinux:
+	@uv venv --seed --no-managed-python -cp 3.10
+	@uv pip install -e '.[dev]'
+
+build-linux: install-manylinux
 	git clone --depth=1 https://github.com/neovim/neovim /tmp/neovim
 	cd /tmp/neovim && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
 	uv run --no-project python -m build --wheel
