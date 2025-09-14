@@ -1,41 +1,53 @@
 NEOVIM_INSTALL_DIR := $(CURDIR)/neovim_pyinstaller/install
 
+ifeq ($(OS),Windows_NT)
+	NEOVIM_OS := win64
+	UNAME_S :=
+else
+    UNAME_S := $(shell uname -s)
+	UNAME_M := $(shell uname -m)
+
+    ifeq ($(UNAME_S),Darwin)
+		NEOVIM_OS := macos
+	else
+		NEOVIM_OS := linux
+	endif
+
+	ifeq ($(UNAME_M),x86_64)
+		NEOVIM_ARCH := x86_64
+	else
+		NEOVIM_ARCH := arm64
+	endif
+endif
 
 help:
 	@git grep -ho --perl-regexp --color=never '^[A-Za-z-]+(?=:)' Makefile
-
-clean:
-	rm -rf .venv/ neovim_pyinstaller/install/
 
 bootstrap:
 	@curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/usr/local/bin" sh
 
 .venv:
-	@uv venv --seed --managed-python -cp 3.10
-	@uv pip install -e '.[dev]'
-
-install: .venv
-
-install-manylinux:
-	@uv venv --seed --no-managed-python -cp 3.10
-	@uv pip install -e '.[dev]'
-
-install-win:
-	@/usr/local/bin/uv venv --seed --no-managed-python -cp 3.10
+	@/usr/local/bin/uv venv --seed --managed-python -cp 3.10
 	@/usr/local/bin/uv pip install -e '.[dev]'
 
-build-linux: install-manylinux
+build: .venv
+ifeq ($(UNAME_S),Linux)
 	git clone --depth=1 https://github.com/neovim/neovim /tmp/neovim
 	cd /tmp/neovim && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
-	uv run --no-project python -m build --wheel
+else ifeq ($(UNAME_S),Darwin)
+	curl -L https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH).tar.gz -o nvim.tar.gz
+	tar xf nvim.tar.gz
+	mv nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH)/ neovim_pyinstaller/install/
+else
+	curl -L https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-$(NEOVIM_OS).zip -o nvim.zip
+	unzip nvim.zip
+	mv nvim-$(NEOVIM_OS)/ neovim_pyinstaller/install/
+endif
+	/usr/local/bin/uv run --no-project python -m build --wheel
 
-build-macos: .venv
-	uv run python download_macos.py
-	uv run --no-project python -m build --wheel
-
-build-win: install-win
-	uv run python download_win.py
-	uv run --no-project python -m build --wheel
+clean:
+	uvx python -c "import shutil; shutil.rmtree('dist/', ignore_errors=True)"
+	uvx python -c "import shutil; shutil.rmtree('neovim_pyinstaller/install/', ignore_errors=True)"
 
 docker:
 	@echo Launching container...
