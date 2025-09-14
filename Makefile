@@ -14,7 +14,7 @@ bootstrap:
 	@uv venv --seed --managed-python -cp 3.10
 	@uv pip install -e '.[dev]'
 
-install: .venv/
+install: .venv
 
 install-manylinux:
 	@uv venv --seed --no-managed-python -cp 3.10
@@ -25,7 +25,7 @@ build-linux: install-manylinux
 	cd /tmp/neovim && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
 	uv run --no-project python -m build --wheel
 
-build-macos: install
+build-macos: .venv
 	uv run python download_macos.py
 	uv run --no-project python -m build --wheel
 
