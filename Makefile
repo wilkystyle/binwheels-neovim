@@ -29,6 +29,10 @@ build-macos: .venv
 	uv run python download_macos.py
 	uv run --no-project python -m build --wheel
 
+build-win: .venv
+	uv run python download_win.py
+	uv run --no-project python -m build --wheel
+
 docker:
 	@echo Launching container...
 	@docker run --rm -d --name neovim_pyinstaller quay.io/pypa/manylinux_2_24_x86_64 tail -f /dev/null
