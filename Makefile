@@ -1,5 +1,13 @@
 NEOVIM_INSTALL_DIR := $(CURDIR)/neovim_pyinstaller/install
 
+ifndef WHEEL_VERSION
+$(error WHEEL_VERSION not set. Usage: make WHEEL_VERSION=vX.Y.Z)
+endif
+
+ifndef NEOVIM_VERSION_TAG
+$(error NEOVIM_VERSION_TAG not set. Usage: make NEOVIM_VERSION_TAG=vX.Y.Z)
+endif
+
 ifeq ($(OS),Windows_NT)
 	NEOVIM_OS := win64
 	UNAME_S :=
@@ -35,14 +43,15 @@ ifeq ($(UNAME_S),Linux)
 	git clone --depth=1 https://github.com/neovim/neovim /tmp/neovim
 	cd /tmp/neovim && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
 else ifeq ($(UNAME_S),Darwin)
-	curl -L https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH).tar.gz -o nvim.tar.gz
+	curl -L https://github.com/neovim/neovim/releases/download/$(NEOVIM_VERSION_TAG)/nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH).tar.gz -o nvim.tar.gz
 	tar xf nvim.tar.gz
 	mv nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH)/ neovim_pyinstaller/install/
 else
-	curl -L https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-$(NEOVIM_OS).zip -o nvim.zip
+	curl -L https://github.com/neovim/neovim/releases/download/$(NEOVIM_VERSION_TAG)/nvim-$(NEOVIM_OS).zip -o nvim.zip
 	unzip nvim.zip
 	mv nvim-$(NEOVIM_OS)/ neovim_pyinstaller/install/
 endif
+	/usr/local/bin/uv version --frozen $(WHEEL_VERSION)
 	/usr/local/bin/uv run --no-project python -m build --wheel
 
 clean:
