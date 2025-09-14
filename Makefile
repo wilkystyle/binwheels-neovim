@@ -1,11 +1,11 @@
 NEOVIM_INSTALL_DIR := $(CURDIR)/neovim_pyinstaller/install
 
 ifndef WHEEL_VERSION
-$(error WHEEL_VERSION not set. Usage: make WHEEL_VERSION=vX.Y.Z)
+$(error WHEEL_VERSION not set. Example: make WHEEL_VERSION=0.11.4rc1)
 endif
 
 ifndef NEOVIM_VERSION_TAG
-$(error NEOVIM_VERSION_TAG not set. Usage: make NEOVIM_VERSION_TAG=vX.Y.Z)
+$(error NEOVIM_VERSION_TAG not set. Example: make NEOVIM_VERSION_TAG=v0.11.4)
 endif
 
 ifeq ($(OS),Windows_NT)
