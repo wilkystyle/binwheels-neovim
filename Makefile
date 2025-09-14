@@ -20,6 +20,10 @@ install-manylinux:
 	@uv venv --seed --no-managed-python -cp 3.10
 	@uv pip install -e '.[dev]'
 
+install-win:
+	@/usr/local/bin/uv venv --seed --no-managed-python -cp 3.10
+	@/usr/local/bin/uv pip install -e '.[dev]'
+
 build-linux: install-manylinux
 	git clone --depth=1 https://github.com/neovim/neovim /tmp/neovim
 	cd /tmp/neovim && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
@@ -29,7 +33,7 @@ build-macos: .venv
 	uv run python download_macos.py
 	uv run --no-project python -m build --wheel
 
-build-win: .venv
+build-win: install-win
 	uv run python download_win.py
 	uv run --no-project python -m build --wheel
 
