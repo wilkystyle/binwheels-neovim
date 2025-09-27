@@ -1,13 +1,5 @@
 NEOVIM_INSTALL_DIR := $(CURDIR)/neovim_pyinstaller/install
 
-ifndef WHEEL_VERSION
-$(error WHEEL_VERSION not set. Example: make WHEEL_VERSION=0.11.4rc1)
-endif
-
-ifndef NEOVIM_VERSION_TAG
-$(error NEOVIM_VERSION_TAG not set. Example: make NEOVIM_VERSION_TAG=v0.11.4)
-endif
-
 ifeq ($(OS),Windows_NT)
 	NEOVIM_OS := win64
 	UNAME_S :=
@@ -39,6 +31,14 @@ bootstrap:
 	@/usr/local/bin/uv pip install -e '.[dev]'
 
 build: .venv
+ifndef WHEEL_VERSION
+	$(error WHEEL_VERSION not set. Example: make WHEEL_VERSION=0.11.4rc1)
+endif
+
+ifndef NEOVIM_VERSION_TAG
+	$(error NEOVIM_VERSION_TAG not set. Example: make NEOVIM_VERSION_TAG=v0.11.4)
+endif
+
 ifeq ($(UNAME_S),Linux)
 	git clone --depth=1 https://github.com/neovim/neovim /tmp/neovim
 	cd /tmp/neovim && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
