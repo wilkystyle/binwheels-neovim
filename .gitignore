@@ -2,7 +2,7 @@
 __pycache__/
 dist/
 fixed_wheels/
-neovim_pyinstaller/install/
+binwheels_neovim/install/
 
 *.egg-info/
 

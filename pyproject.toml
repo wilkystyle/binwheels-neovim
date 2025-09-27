@@ -1,5 +1,5 @@
 [project]
-name = "neovim-pyinstaller"
+name = "binwheels-neovim"
 version = "0.11.4"  # IMPORTANT: Will be overwritten at runtime by GitHub Actions workflow
 description = "Cross-platform Neovim installation via Python packaging"
 readme = "README.md"
@@ -37,10 +37,8 @@ dev = [
     "packaging",
 ]
 
-# [project.urls]
-# Homepage = "https://github.com/neovim/neovim"
-# Repository = "https://github.com/your-username/neovim-pyinstaller"
-# Issues = "https://github.com/your-username/neovim-pyinstaller/issues"
+[project.urls]
+Repository = "https://github.com/wilkystyle/binwheels-neovim"
 
 [build-system]
 requires = ["hatchling"]
@@ -51,14 +49,14 @@ dev-mode-dirs = ["."]
 
 [tool.hatch.build.targets.wheel]
 ignore-vcs = true  # Don't obey .gitignore, as we want to include ignored files in the wheel
-include = ["neovim_pyinstaller/"]
-artifacts = ["neovim_pyinstaller/install/**/*"]
+include = ["binwheels_neovim/"]
+artifacts = ["binwheels_neovim/install/**/*"]
 
 # Needed for platform-specific wheel tags. Hooks are defined inside hatch_build.py
 [tool.hatch.build.targets.wheel.hooks.custom]
 
 [project.scripts]
-nvim = "neovim_pyinstaller.main:launch_neovim"
+nvim = "binwheels_neovim.main:launch_neovim"
 
 [tool.ruff.lint]
 # Enable all `pydocstyle` rules, limiting to those that adhere to the

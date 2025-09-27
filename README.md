@@ -1,4 +1,4 @@
-# neovim-pyinstaller
+# binwheels-neovim
 
 Cross-platform Neovim installation via Python packaging.
 
@@ -7,7 +7,7 @@ This package wraps official Neovim releases to enable easy installation on syste
 ## Installation
 
 ```bash
-uv tool install neovim-pyinstaller
+uv tool install binwheels-neovim
 ```
 
 ## Usage

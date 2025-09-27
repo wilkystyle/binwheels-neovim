@@ -1,4 +1,4 @@
-NEOVIM_INSTALL_DIR := $(CURDIR)/neovim_pyinstaller/install
+NEOVIM_INSTALL_DIR := $(CURDIR)/binwheels_neovim/install
 
 ifeq ($(OS),Windows_NT)
 	NEOVIM_OS := win64
@@ -45,25 +45,25 @@ ifeq ($(UNAME_S),Linux)
 else ifeq ($(UNAME_S),Darwin)
 	curl -L https://github.com/neovim/neovim/releases/download/$(NEOVIM_VERSION_TAG)/nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH).tar.gz -o nvim.tar.gz
 	tar xf nvim.tar.gz
-	mv nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH)/ neovim_pyinstaller/install/
+	mv nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH)/ binwheels_neovim/install/
 else
 	curl -L https://github.com/neovim/neovim/releases/download/$(NEOVIM_VERSION_TAG)/nvim-$(NEOVIM_OS).zip -o nvim.zip
 	unzip nvim.zip
-	mv nvim-$(NEOVIM_OS)/ neovim_pyinstaller/install/
+	mv nvim-$(NEOVIM_OS)/ binwheels_neovim/install/
 endif
 	/usr/local/bin/uv version --frozen $(WHEEL_VERSION)
 	/usr/local/bin/uv run --no-project python -m build --wheel
 
 clean:
 	uvx python -c "import shutil; shutil.rmtree('dist/', ignore_errors=True)"
-	uvx python -c "import shutil; shutil.rmtree('neovim_pyinstaller/install/', ignore_errors=True)"
+	uvx python -c "import shutil; shutil.rmtree('binwheels_neovim/install/', ignore_errors=True)"
 
 docker:
 	@echo Launching container...
-	@docker run --rm -d --name neovim_pyinstaller quay.io/pypa/manylinux_2_24_x86_64 tail -f /dev/null
+	@docker run --rm -d --name binwheels_neovim quay.io/pypa/manylinux_2_24_x86_64 tail -f /dev/null
 	@echo Copying source directory...
-	@docker cp ./ neovim_pyinstaller:/source
-	-@docker exec --workdir /source -it neovim_pyinstaller /bin/bash
-	@echo Removing neovim_pyinstaller container...
-	@docker kill neovim_pyinstaller
+	@docker cp ./ binwheels_neovim:/source
+	-@docker exec --workdir /source -it binwheels_neovim /bin/bash
+	@echo Removing binwheels_neovim container...
+	@docker kill binwheels_neovim
 	@echo ...done.
