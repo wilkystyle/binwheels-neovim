@@ -19,7 +19,7 @@ nvim myfile.txt
 ```
 
 ## How does it work?
-Python wheels adhere to a naming scheme to indicate [platform compatibility](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/). The code in this repository is responsible for downloading (Windows/macOS) or compiling (Linux) an official Neovim release and packaging it into a `binwheels-neovim` wheel with the same version as the Neovim release it includes.
+Python wheels adhere to a naming scheme to indicate [platform compatibility](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/). The code in this repository is responsible for downloading (Windows/macOS) or compiling (Linux) an official Neovim release and packaging it into a `binwheels-neovim` wheel with the same version as the Neovim release it includes, and with platform/architecture tags that match the version of Neovim we have downloaded/compiled. For widest Python interpreter compatibility possible, the `py3-none` tag is used.
 
 During installation, the contents of a Python wheel are unzipped to the `site-packages/` directory in whatever Python environment the wheel is being installed into. This is where the Neovim application files end up: a `binwheels_neovim/` directory inside `site-packages/`. But this doesn't help us, because that location is not on the user's `$PATH`.
 
