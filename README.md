@@ -1,6 +1,8 @@
 # binwheels-neovim
 An unofficial Python package to enable pre-built, cross-platform Neovim installation via standard Python package installation.
 
+You can [find the package on PyPI](https://pypi.org/project/binwheels-neovim/).
+
 ## Usage
 Using [uv](https://astral.sh/uv) or [pipx](https://github.com/pypa/pipx):
 
