@@ -41,8 +41,7 @@ endif
 
 ifeq ($(UNAME_S),Linux)
 	git clone --depth=1 https://github.com/neovim/neovim /tmp/neovim
-	git checkout $(NEOVIM_VERSION_TAG)
-	cd /tmp/neovim && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
+	cd /tmp/neovim && git checkout $(NEOVIM_VERSION_TAG) && make CMAKE_INSTALL_PREFIX=$(NEOVIM_INSTALL_DIR) CMAKE_BUILD_TYPE=RelWithDebInfo && make install
 else ifeq ($(UNAME_S),Darwin)
 	curl -L https://github.com/neovim/neovim/releases/download/$(NEOVIM_VERSION_TAG)/nvim-$(NEOVIM_OS)-$(NEOVIM_ARCH).tar.gz -o nvim.tar.gz
 	tar xf nvim.tar.gz
